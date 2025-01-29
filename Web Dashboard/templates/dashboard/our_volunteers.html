@@ -1,0 +1,106 @@
+{% extends 'dashboard/base.html' %}
+
+{% block our_volunteers_active %} active {% endblock %}
+
+{% block page_name %} Our Volunteers {% endblock %}
+
+{% block css %}
+
+<style>
+    #map {
+        height: 70vh;
+    }
+</style>
+
+{% endblock %}
+
+{% block body %}
+
+
+<div class="panel-header panel-header-sm">
+</div>
+
+
+<div class="content">
+    <div class="row">
+
+        <div class="col-md-12">
+            <div class="card ">
+                <div class="card-body ">
+                    <div id="map" class="map"></div>
+
+                </div>
+            </div>
+        </div>
+
+
+        <!-- <div class="col-md-6">
+            <div class="card ">
+                <div class="card-header ">
+                    <h4 class="card-title">Regular Map</h4>
+                </div>
+                <div class="card-body ">
+                    <div id="regularMap" class="map"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card ">
+                <div class="card-header ">
+                    <h4 class="card-title">Custom Skin & Settings Map</h4>
+                </div>
+                <div class="card-body ">
+                    <div id="customSkinMap" class="map"></div>
+                </div>
+            </div>
+        </div> -->
+    </div>
+</div>
+
+
+<script async
+src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAU4JPtLye2vha0SXv7BTjJq_Ist4bJnYo&callback=console.debug&libraries=maps,marker&v=beta">
+</script>
+
+
+
+
+<script>
+    // Initialize and add the map
+    let map;
+
+    async function initMap() {
+        const position1 = { lat: 27.607209, lng:  77.591331 };
+        const position2 = { lat: 27.605791, lng: 77.594027 };
+
+        const { Map } = await google.maps.importLibrary("maps");
+        const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
+
+        map = new Map(document.getElementById("map"), {
+            zoom: 20,
+            center: position1,
+            mapId: "1",
+            mapTypeControl: true,
+            draggable: true
+        });
+
+        const marker1 = new AdvancedMarkerElement({
+            map: map,
+            position: position1,
+            title: "User Location",
+            gmpDraggable: true,
+        });
+
+        const marker2 = new AdvancedMarkerElement({
+            map: map,
+            position: position2,
+            title: "User Location",
+            gmpDraggable: true,
+        });
+    }
+
+    window.onload = () => {
+        initMap();
+    };
+</script>
+{% endblock %}

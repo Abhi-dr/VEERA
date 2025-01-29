@@ -1,0 +1,285 @@
+{% extends 'dashboard/base.html' %}
+{% load static %}
+
+{% block dashboard_active %} active {% endblock %}
+
+{% block page_name %} Dashboard {% endblock %}
+
+{% block body %}
+
+<div class="panel-header">
+  
+</div>
+<div class="content">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card card-stats">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-3">
+              <div class="statistics">
+                <div class="info">
+                  <div class="icon icon-primary">
+                    <i class="now-ui-icons ui-2_chat-round"></i>
+                  </div>
+                  <h3 class="info-title" id="sos-calls">Loading...</h3>
+                  <h6 class="stats-title">SOS Received</h6>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="statistics">
+                <div class="info">
+                  <div class="icon icon-success">
+                    <i class="now-ui-icons users_single-02"></i>
+                  </div>
+                  <h3 class="info-title" id="volunteers">Loading...</h3>
+                  <h6 class="stats-title">Volunteers</h6>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="statistics">
+                <div class="info">
+                  <div class="icon icon-info">
+                    <i class="now-ui-icons users_single-02"></i>
+                  </div>
+                  <h3 class="info-title" id="users">Loading...</h3>
+                  <h6 class="stats-title">Users Registered</h6>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="statistics">
+                <div class="info">
+                  <div class="icon icon-danger">
+                    <i class="now-ui-icons objects_support-17"></i>
+                  </div>
+                  <h3 class="info-title">278</h3>
+                  <h6 class="stats-title">Issues Solved</h6>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-2 mr-auto d-none">
+    <div class="card ">
+      <div class="card-body text-center">
+        <button class="btn btn-primary btn-fill" id="sos-btn" onclick="return triggerSOSAlert();">SOS</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="content">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header">
+          <h4 class="card-title">Last SOS Calls</h4>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table">
+              <thead class="text-primary">
+                <th class="text-center">
+                  #
+                </th>
+                <th>
+                  Name
+                </th>
+                <th>
+                  Phone Number
+                </th>
+                
+                <th>
+                  Message
+                </th>
+
+                <th class="text-center">
+                  Latitude, Longitude
+                </th>
+                <th class="text-right">
+                  Time
+                </th>
+                <!-- <th class="text-right">
+                  Actions
+                </th> -->
+              </thead>
+              <tbody>
+
+                {% for call in sos_calls %}
+
+                <tr>
+
+                  <td class="text-center">
+                    {{ forloop.counter }}
+                  </td>
+
+                  <td>
+                    {{ call.name }}
+                  </td>
+
+                  <td>
+                    {{ call.phone_number }}
+                  </td>
+                  
+                  <td>
+                    {{ call.message }}
+                  </td>
+
+                  <td class="text-center">
+                    {{ call.latitude }}, {{ call.longitude }}
+                    <a href="https://www.google.com/maps/dir/?api=1&destination={{ call.latitude }},{{ call.longitude }}" type="button" target="_blank" rel="tooltip" class="btn btn-success btn-icon btn-sm ">
+                      <i class="now-ui-icons location_compass-05"></i>
+                    </a>
+                  </td>
+
+                  <td class="text-right">
+                    {{ call.timestamp }}
+                  </td>
+
+                  <!-- <td class="text-right">
+                    <button type="button" rel="tooltip" class="btn btn-info btn-icon btn-sm ">
+                      <i class="now-ui-icons users_single-02"></i>
+                    </button>
+                    <button type="button" rel="tooltip" class="btn btn-success btn-icon btn-sm ">
+                      <i class="now-ui-icons ui-2_settings-90"></i>
+                    </button>
+                    <button type="button" rel="tooltip" class="btn btn-danger btn-icon btn-sm ">
+                      <i class="now-ui-icons ui-1_simple-remove"></i>
+                    </button>
+                  </td> -->
+                </tr>
+
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+
+<script>
+  // Function to fetch SOS calls
+  function fetchSOSCalls() {
+    fetch("{% url 'get_sos_calls' %}")
+      .then(response => response.json())
+      .then(data => {
+        document.getElementById('sos-calls').textContent = data.sos_calls;
+      })
+      .catch(error => {
+        console.error('Error fetching SOS calls:', error);
+        document.getElementById('sos-calls').textContent = 'Error loading data';
+      });
+  }
+
+
+  function fetchVolunteersNumber() {
+    fetch("{% url 'get_volunteers_number' %}")
+      .then(response => response.json())
+      .then(data => {
+        document.getElementById('volunteers').textContent = data.volunteers_number;
+      })
+      .catch(error => {
+        console.error('Error fetching Volunteers:', error);
+        document.getElementById('volunteers').textContent = 'Error loading Volunteers';
+      });
+  }
+
+  function fetchUserNumbers() {
+    fetch("{% url 'get_users_number' %}")
+      .then(response => response.json())
+      .then(data => {
+        document.getElementById('users').textContent = data.users_number + "+";
+      })
+      .catch(error => {
+        console.error('Error fetching Users:', error);
+        document.getElementById('users').textContent = 'Error loading Users';
+      });
+  }
+
+  function clickSos() {
+    document.getElementById('sos-btn').click();
+  }
+
+  function playBeep() {
+    // const audio = new Audio("{% static 'files/beep2_trimmed.mp3' %}");
+    const audio = new Audio("{% static 'files/beep1.mp3' %}");
+    audio.play();
+  }
+
+  // Fetch SOS calls when the page loads
+  window.onload = function () {
+    fetchSOSCalls();
+    fetchVolunteersNumber();
+    fetchUserNumbers();
+  };
+
+
+  function fetchLatestSOSAlert() {
+    $.ajax({
+      url: "http://192.168.115.81:8000/dashboard/api/fetch_sos_alert/",  // The API endpoint
+      method: 'GET',
+      success: function (data) {
+        if (data.alert) {
+
+          console.log("From ajex vala")
+          console.log(data.alert.latitude);
+          console.log(data.alert.longitude);
+
+          clickSos();
+          playBeep();
+        } else {
+          console.log(data.message);  // No recent SOS alerts
+        }
+      },
+      error: function () {
+        console.error('Failed to fetch the latest SOS alert', error);
+      }
+    });
+  }
+
+
+  function triggerSOSAlert() {
+    fetch("http://192.168.115.81:8000/dashboard/api/fetch_sos_alert/")
+      .then(response => response.json())
+      .then(data => {
+        if (data.alert) {
+          const name = data.alert.name;
+          const message = data.alert.message;
+          const latitude = data.alert.latitude;
+          const longitude = data.alert.longitude;
+
+          // Now pass latitude and longitude to the Swal function
+          demo.showSwal('success-message', name, message, latitude + ", " + longitude);
+        } else {
+          console.log(data.message);  // No recent SOS alerts
+        }
+      })
+      .catch(error => console.error('Error:', error));
+  }
+
+  
+
+
+
+  setInterval(fetchLatestSOSAlert, 2000);
+
+  // setInterval(fetchSOSCalls, 5000);
+
+
+
+</script>
+
+{% endblock %}

@@ -1,0 +1,128 @@
+{% extends 'dashboard/base.html' %}
+
+{% block danger_zones_active %} active {% endblock %}
+
+{% block page_name %} Danger Zones {% endblock %}
+
+{% block css %}
+
+<style>
+    #map {
+        height: 70vh;
+    }
+</style>
+
+{% endblock %}
+
+{% block body %}
+
+
+<div class="panel-header panel-header-sm">
+</div>
+
+
+<!-- <div class="content">
+    <div class="row">
+
+        <div class="col-md-12">
+            <div class="card ">
+                <div class="card-body ">
+                    <div id="map" class="map"></div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div> -->
+
+
+<div class="content">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-header">
+            <h4 class="card-title">Last SOS Calls</h4>
+          </div>
+          <div class="card-body">
+            <div class="table-responsive">
+              <table class="table">
+                <thead class="text-primary">
+                  <th class="text-center">
+                    #
+                  </th>
+                  <th>
+                    Area Name
+                  </th>
+                  <th>
+                    No. of Cases
+                  </th>
+                  
+                  <th>
+                    Coordinates
+                  </th>
+  
+                  <th class="text-center">
+                    Actions
+                  </th>
+                  
+                </thead>
+                <tbody>
+  
+                  {% for call in danger_zones %}
+  
+                  <tr>
+  
+                    <td class="text-center">
+                      {{ forloop.counter }}
+                    </td>
+  
+                    <td>
+                      {{ call.area_name }}
+                    </td>
+  
+                    <td>
+                      {{ call.get_total_no_of_cases }}
+                    </td>
+                    
+                    <td>
+                      {{ call.latitude }}, {{ call.longitude }}
+                    </td>
+  
+                    <td class="text-center">
+                      <a href="https://www.google.com/maps/dir/?api=1&destination={{ call.latitude }},{{ call.longitude }}" type="button" target="_blank" rel="tooltip" class="btn btn-success btn-icon btn-sm ">
+                        <i class="now-ui-icons location_compass-05"></i>
+                      </a>
+                    </td>
+  
+                    <!-- <td class="text-right">
+                      <button type="button" rel="tooltip" class="btn btn-info btn-icon btn-sm ">
+                        <i class="now-ui-icons users_single-02"></i>
+                      </button>
+                      <button type="button" rel="tooltip" class="btn btn-success btn-icon btn-sm ">
+                        <i class="now-ui-icons ui-2_settings-90"></i>
+                      </button>
+                      <button type="button" rel="tooltip" class="btn btn-danger btn-icon btn-sm ">
+                        <i class="now-ui-icons ui-1_simple-remove"></i>
+                      </button>
+                    </td> -->
+                  </tr>
+  
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+  
+    </div>
+  </div>
+  
+  
+
+
+<script async
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAU4JPtLye2vha0SXv7BTjJq_Ist4bJnYo&callback=console.debug&libraries=maps,marker&v=beta">
+    </script>
+
+{% endblock %}
