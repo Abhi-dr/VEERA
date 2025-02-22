@@ -229,7 +229,7 @@
 
   function fetchLatestSOSAlert() {
     $.ajax({
-      url: "http://192.168.115.81:8000/dashboard/api/fetch_sos_alert/",  // The API endpoint
+      url: "http://192.168.23.81:8000/dashboard/api/fetch_sos_alert/",  // The API endpoint
       method: 'GET',
       success: function (data) {
         if (data.alert) {
@@ -252,7 +252,7 @@
 
 
   function triggerSOSAlert() {
-    fetch("http://192.168.115.81:8000/dashboard/api/fetch_sos_alert/")
+    fetch("http://192.168.23.81:8000/dashboard/api/fetch_sos_alert/")
       .then(response => response.json())
       .then(data => {
         if (data.alert) {
